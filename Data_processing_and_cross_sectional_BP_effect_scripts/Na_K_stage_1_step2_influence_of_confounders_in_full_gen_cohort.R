@@ -83,6 +83,12 @@ write.table(Merged_regression_out, file="Stage1_cross_sectional_results/Multiple
 Melted_raw <- melt(Merged_regression_out, id.vars=c("Phenotype"), 
                    measure.vars = c("SBP", "DBP", "Na_urine", "K_urine"))
 
+Melted_raw$variable <- recode(Melted_raw$variable, Na_urine="Urinary Na+",
+                                    K_urine="Urinary K+",
+                                    SBP="SBP", DBP="DBP")
+
+Melted_raw$Phenotype <- recode(Melted_raw$Phenotype, BP_meds = "BP Meds",
+                               Assesment_centre_month="Seasonality", Assesment_centre="Assessment Centre")
 ## Plot Multiple R2
 
 RAW<- ggplot(data = Melted_raw, aes(x=Phenotype, y=value, fill = as.factor(Phenotype))) +
@@ -119,6 +125,13 @@ write.table(Merged_regression_out_LOG, file="Stage1_cross_sectional_results/Mult
 Melted_raw_LOG <- melt(Merged_regression_out_LOG, id.vars=c("Phenotype"), 
                    measure.vars = c("SBP", "DBP", "Na_urine", "K_urine"))
 
+Melted_raw_LOG$variable <- recode(Melted_raw_LOG$variable, Na_urine="Urinary Na+",
+                              K_urine="Urinary K+",
+                              SBP="SBP", DBP="DBP")
+
+Melted_raw_LOG$Phenotype <- recode(Melted_raw_LOG$Phenotype, BP_meds = "BP Meds",
+                               Assesment_centre_month="Seasonality", Assesment_centre="Assessment Centre")
+
 ## Plot Multiple R2
 
 LOG <- ggplot(data = Melted_raw_LOG, aes(x=Phenotype, y=value, fill = as.factor(Phenotype))) +
@@ -129,6 +142,8 @@ LOG <- ggplot(data = Melted_raw_LOG, aes(x=Phenotype, y=value, fill = as.factor(
   ylim(-0.001,0.15) +
   ylab(expression(R^{"2"})) +
   ggtitle("Natural log transformed outcome")
+
+ggarrange(RAW, LOG, nrow = 2)
 
 ## Derive Na/K ratio and output
 
