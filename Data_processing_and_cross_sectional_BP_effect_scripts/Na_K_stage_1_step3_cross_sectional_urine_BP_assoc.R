@@ -21,6 +21,10 @@ library(ggridges)
 
 Subcohort_1_dat <- fread("Subcohort_1_FILTERED_CORRECTLY_FOR_Na_K_RATIO_INCL.txt")
 
+table1( ~ factor(Sex) + Age + Mean_SBP + Mean_DBP + BMI + Na_urine_millimolL +
+          K_urine_millimolL + Creatinine_urine_micromolL | factor(`BP Medication`),
+        data = Subcohort_1_dat)
+
 Subcohort_1_dat$BP_meds <- as.factor(Subcohort_1_dat$BP_meds)
 Subcohort_1_dat$Assesment_centre_month <- as.factor(Subcohort_1_dat$Assesment_centre_month)
 Subcohort_1_dat$Assesment_centre <- as.factor(Subcohort_1_dat$Assesment_centre)
@@ -168,6 +172,20 @@ BMI_adj_K_SBP <- lm(Mean_SBP ~ Sex + Age + Age2 + BP_meds + Assesment_centre_mon
 
 BMI_adj_K_DBP <- lm(Mean_DBP ~ Sex + Age + Age2 + BP_meds + Assesment_centre_month +
                        Assesment_centre + BMI + K_urine_millimolL, data = Subcohort_1_dat)
+
+## Adjust for BMI and creatinine
+
+Creat_BMI_adj_Na_SBP <- lm(Mean_SBP ~ Sex + Age + Age2 + BP_meds + Assesment_centre_month +
+                       Assesment_centre + BMI + Creatinine_urine_micromolL + Na_urine_millimolL, data = Subcohort_1_dat)
+
+Creat_BMI_adj_Na_DBP <- lm(Mean_DBP ~ Sex + Age + Age2 + BP_meds + Assesment_centre_month +
+                       Assesment_centre + BMI + Creatinine_urine_micromolL + Na_urine_millimolL, data = Subcohort_1_dat)
+
+Creat_BMI_adj_K_SBP <- lm(Mean_SBP ~ Sex + Age + Age2 + BP_meds + Assesment_centre_month +
+                      Assesment_centre + BMI + Creatinine_urine_micromolL + K_urine_millimolL, data = Subcohort_1_dat)
+
+Creat_BMI_adj_K_DBP <- lm(Mean_DBP ~ Sex + Age + Age2 + BP_meds + Assesment_centre_month +
+                      Assesment_centre + BMI + Creatinine_urine_micromolL + K_urine_millimolL, data = Subcohort_1_dat)
 
 ## Better ratio plot
 
