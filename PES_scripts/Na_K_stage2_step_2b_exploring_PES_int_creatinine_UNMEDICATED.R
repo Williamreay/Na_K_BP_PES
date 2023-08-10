@@ -60,18 +60,33 @@ TE_CREAT <- lm(Mean_SBP ~ Sex + Age + Age2 + Assesment_centre_month +
            Assesment_centre + PC1 + PC2 + PC3 + PC4 + PC5 + PC10 + PC11 +
            PC12 + PC13 + PC14 + PC15 + PC16 + PC17 + PC18 + PC19 + PC20 + Scaled_CRET + Transport_SBP_PES_AVG*Scaled_Na, data = Merged_PGS_PES)
 
-Ratio_Transport_int_G_C_C_E <- lm(Mean_SBP ~ Sex*Transport_SBP_PES_AVG + Age*Transport_SBP_PES_AVG + Age2*Transport_SBP_PES_AVG + Assesment_centre_month*Transport_SBP_PES_AVG + 
-                                    Assesment_centre*Transport_SBP_PES_AVG + PC1*Transport_SBP_PES_AVG + PC2*Transport_SBP_PES_AVG+ 
-                                    PC3*Transport_SBP_PES_AVG + PC4*Transport_SBP_PES_AVG + PC5*Transport_SBP_PES_AVG + PC10*Transport_SBP_PES_AVG+ PC11*Transport_SBP_PES_AVG +
-                                    PC12*Transport_SBP_PES_AVG + PC13*Transport_SBP_PES_AVG + PC14*Transport_SBP_PES_AVG + PC15*Transport_SBP_PES_AVG + 
-                                    PC16*Transport_SBP_PES_AVG + PC17*Transport_SBP_PES_AVG + PC18*Transport_SBP_PES_AVG + PC19*Transport_SBP_PES_AVG + PC20*Transport_SBP_PES_AVG + 
-                                    Scaled_Na*Transport_SBP_PES_AVG +
-                                    Sex*Scaled_Na + Age*Scaled_Na + Age2*Scaled_Na + Assesment_centre_month*Scaled_Na + 
-                                    Assesment_centre*Scaled_Na + PC1*Scaled_Na + PC2*Scaled_Na+ PC3*Scaled_Na + PC4*Scaled_Na + PC5*Scaled_Na + PC10*Scaled_Na+ PC11*Scaled_Na +
-                                    PC12*Scaled_Na + PC13*Scaled_Na + PC14*Scaled_Na + PC15*Scaled_Na + PC16*Scaled_Na + PC17*Scaled_Na + PC18*Scaled_Na + PC19*Scaled_Na + PC20*Scaled_Na +
-                                    Scaled_CRET*Scaled_Na + Scaled_CRET*Transport_SBP_PES_AVG,
-                                  data = Merged_PGS_PES)
+Transport_int_G_C_E_C <- lm(Mean_SBP ~ Sex*Transport_SBP_PES_AVG + Age*Transport_SBP_PES_AVG + Age2*Transport_SBP_PES_AVG + Assesment_centre_month*Transport_SBP_PES_AVG + 
+                              Assesment_centre*Transport_SBP_PES_AVG + PC1*Transport_SBP_PES_AVG + PC2*Transport_SBP_PES_AVG + PC3*Transport_SBP_PES_AVG + PC4*Transport_SBP_PES_AVG + PC5*Transport_SBP_PES_AVG + PC6*Transport_SBP_PES_AVG +
+                              PC7*Transport_SBP_PES_AVG + PC8*Transport_SBP_PES_AVG + PC9*Transport_SBP_PES_AVG +
+                              PC10*Transport_SBP_PES_AVG + PC11*Transport_SBP_PES_AVG +
+                              PC12*Transport_SBP_PES_AVG + PC13*Transport_SBP_PES_AVG + PC14*Transport_SBP_PES_AVG + PC15*Transport_SBP_PES_AVG + PC16*Transport_SBP_PES_AVG + PC17*Transport_SBP_PES_AVG + PC18*Transport_SBP_PES_AVG + PC19*Transport_SBP_PES_AVG + PC20*Transport_SBP_PES_AVG + 
+                              Sex*Scaled_Na + Age*Scaled_Na + Age2*Scaled_Na + Assesment_centre_month*Scaled_Na + 
+                              Assesment_centre*Scaled_Na + PC1*Scaled_Na + PC2*Scaled_Na + PC3*Scaled_Na + PC4*Scaled_Na + PC5*Scaled_Na + PC6*Scaled_Na +
+                              PC7*Scaled_Na + PC8*Scaled_Na + PC9*Scaled_Na +
+                              PC10*Scaled_Na + PC11*Scaled_Na +
+                              PC12*Scaled_Na + PC13*Scaled_Na + PC14*Scaled_Na + PC15*Scaled_Na + PC16*Scaled_Na + PC17*Scaled_Na + PC18*Scaled_Na + PC19*Scaled_Na + PC20*Scaled_Na +Scaled_Na*Transport_SBP_PES_AVG + Transport_SBP_PES_AVG*Scaled_CRET + Scaled_Na*Scaled_CRET,
+                            data = Merged_PGS_PES)
 
-summary(Ratio_Transport_int_G_C_C_E)
+## BMI incl
+
+BMI_Transport_int_G_C_E_C <- lm(Mean_SBP ~ Sex*Transport_SBP_PES_AVG + Age*Transport_SBP_PES_AVG + Age2*Transport_SBP_PES_AVG + Assesment_centre_month*Transport_SBP_PES_AVG + 
+                              Assesment_centre*Transport_SBP_PES_AVG + PC1*Transport_SBP_PES_AVG + PC2*Transport_SBP_PES_AVG + PC3*Transport_SBP_PES_AVG + PC4*Transport_SBP_PES_AVG + PC5*Transport_SBP_PES_AVG + PC6*Transport_SBP_PES_AVG +
+                              PC7*Transport_SBP_PES_AVG + PC8*Transport_SBP_PES_AVG + PC9*Transport_SBP_PES_AVG +
+                              PC10*Transport_SBP_PES_AVG + PC11*Transport_SBP_PES_AVG +
+                              PC12*Transport_SBP_PES_AVG + PC13*Transport_SBP_PES_AVG + PC14*Transport_SBP_PES_AVG + PC15*Transport_SBP_PES_AVG + PC16*Transport_SBP_PES_AVG + PC17*Transport_SBP_PES_AVG + PC18*Transport_SBP_PES_AVG + PC19*Transport_SBP_PES_AVG + PC20*Transport_SBP_PES_AVG + 
+                              Sex*Scaled_Na + Age*Scaled_Na + Age2*Scaled_Na + Assesment_centre_month*Scaled_Na + 
+                              Assesment_centre*Scaled_Na + PC1*Scaled_Na + PC2*Scaled_Na + PC3*Scaled_Na + PC4*Scaled_Na + PC5*Scaled_Na + PC6*Scaled_Na +
+                              PC7*Scaled_Na + PC8*Scaled_Na + PC9*Scaled_Na +
+                              PC10*Scaled_Na + PC11*Scaled_Na +
+                              PC12*Scaled_Na + PC13*Scaled_Na + PC14*Scaled_Na + PC15*Scaled_Na + PC16*Scaled_Na + PC17*Scaled_Na + PC18*Scaled_Na + PC19*Scaled_Na + PC20*Scaled_Na +Scaled_Na*Transport_SBP_PES_AVG + Transport_SBP_PES_AVG*Scaled_CRET + Scaled_Na*Scaled_CRET +
+                                Transport_SBP_PES_AVG*scale(BMI) + Scaled_Na*scale(BMI),
+                            data = Merged_PGS_PES)
+
+
 
 

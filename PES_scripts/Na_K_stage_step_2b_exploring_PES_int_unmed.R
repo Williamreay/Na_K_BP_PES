@@ -67,34 +67,30 @@ TE <- lm(Mean_SBP ~ Sex + Age + Age2 + Assesment_centre_month +
   Assesment_centre + PC1 + PC2 + PC3 + PC4 + PC5 + PC10 + PC11 +
   PC12 + PC13 + PC14 + PC15 + PC16 + PC17 + PC18 + PC19 + PC20 + Scaled_Na*Transport_SBP_PES_AVG, data = Merged_PGS_PES)
 
-Ratio_Transport_int_G_C_C_E <- lm(Mean_SBP ~ Sex*Transport_SBP_PES_AVG + Age*Transport_SBP_PES_AVG + Age2*Transport_SBP_PES_AVG + Assesment_centre_month*Transport_SBP_PES_AVG + 
-                              Assesment_centre*Transport_SBP_PES_AVG + PC1*Transport_SBP_PES_AVG + PC2*Transport_SBP_PES_AVG+ 
-                              PC3*Transport_SBP_PES_AVG + PC4*Transport_SBP_PES_AVG + PC5*Transport_SBP_PES_AVG + PC10*Transport_SBP_PES_AVG+ PC11*Transport_SBP_PES_AVG +
-                              PC12*Transport_SBP_PES_AVG + PC13*Transport_SBP_PES_AVG + PC14*Transport_SBP_PES_AVG + PC15*Transport_SBP_PES_AVG + 
-                              PC16*Transport_SBP_PES_AVG + PC17*Transport_SBP_PES_AVG + PC18*Transport_SBP_PES_AVG + PC19*Transport_SBP_PES_AVG + PC20*Transport_SBP_PES_AVG + 
-                              Scaled_Na*Transport_SBP_PES_AVG +
+Transport_int_G_C_E_C <- lm(Mean_SBP ~ Sex*Transport_SBP_PES_AVG + Age*Transport_SBP_PES_AVG + Age2*Transport_SBP_PES_AVG + Assesment_centre_month*Transport_SBP_PES_AVG + 
+                              Assesment_centre*Transport_SBP_PES_AVG + PC1*Transport_SBP_PES_AVG + PC2*Transport_SBP_PES_AVG + PC3*Transport_SBP_PES_AVG + PC4*Transport_SBP_PES_AVG + PC5*Transport_SBP_PES_AVG + PC6*Transport_SBP_PES_AVG +
+                              PC7*Transport_SBP_PES_AVG + PC8*Transport_SBP_PES_AVG + PC9*Transport_SBP_PES_AVG +
+                              PC10*Transport_SBP_PES_AVG + PC11*Transport_SBP_PES_AVG +
+                              PC12*Transport_SBP_PES_AVG + PC13*Transport_SBP_PES_AVG + PC14*Transport_SBP_PES_AVG + PC15*Transport_SBP_PES_AVG + PC16*Transport_SBP_PES_AVG + PC17*Transport_SBP_PES_AVG + PC18*Transport_SBP_PES_AVG + PC19*Transport_SBP_PES_AVG + PC20*Transport_SBP_PES_AVG + 
                               Sex*Scaled_Na + Age*Scaled_Na + Age2*Scaled_Na + Assesment_centre_month*Scaled_Na + 
-                              Assesment_centre*Scaled_Na + PC1*Scaled_Na + PC2*Scaled_Na+ PC3*Scaled_Na + PC4*Scaled_Na + PC5*Scaled_Na + PC10*Scaled_Na+ PC11*Scaled_Na +
-                              PC12*Scaled_Na + PC13*Scaled_Na + PC14*Scaled_Na + PC15*Scaled_Na + PC16*Scaled_Na + PC17*Scaled_Na + PC18*Scaled_Na + PC19*Scaled_Na + PC20*Scaled_Na,
+                              Assesment_centre*Scaled_Na + PC1*Scaled_Na + PC2*Scaled_Na + PC3*Scaled_Na + PC4*Scaled_Na + PC5*Scaled_Na + PC6*Scaled_Na +
+                              PC7*Scaled_Na + PC8*Scaled_Na + PC9*Scaled_Na +
+                              PC10*Scaled_Na + PC11*Scaled_Na +
+                              PC12*Scaled_Na + PC13*Scaled_Na + PC14*Scaled_Na + PC15*Scaled_Na + PC16*Scaled_Na + PC17*Scaled_Na + PC18*Scaled_Na + PC19*Scaled_Na + PC20*Scaled_Na +Scaled_Na*Transport_SBP_PES_AVG,
                             data = Merged_PGS_PES)
-
-summary(Ratio_Transport_int_G_C_C_E)
-
 ## Same on DBP
 
-DBP_Ratio_Transport_int_G_C_C_E <- lm(Mean_DBP ~ Sex*Transport_SBP_PES_AVG + Age*Transport_SBP_PES_AVG + Age2*Transport_SBP_PES_AVG + Assesment_centre_month*Transport_SBP_PES_AVG + 
-                                    Assesment_centre*Transport_SBP_PES_AVG + PC1*Transport_SBP_PES_AVG + PC2*Transport_SBP_PES_AVG+ 
-                                    PC3*Transport_SBP_PES_AVG + PC4*Transport_SBP_PES_AVG + PC5*Transport_SBP_PES_AVG + PC10*Transport_SBP_PES_AVG+ PC11*Transport_SBP_PES_AVG +
-                                    PC12*Transport_SBP_PES_AVG + PC13*Transport_SBP_PES_AVG + PC14*Transport_SBP_PES_AVG + PC15*Transport_SBP_PES_AVG + 
-                                    PC16*Transport_SBP_PES_AVG + PC17*Transport_SBP_PES_AVG + PC18*Transport_SBP_PES_AVG + PC19*Transport_SBP_PES_AVG + PC20*Transport_SBP_PES_AVG + 
-                                    Scaled_Na*Transport_SBP_PES_AVG +
-                                    Sex*Scaled_Na + Age*Scaled_Na + Age2*Scaled_Na + Assesment_centre_month*Scaled_Na + 
-                                    Assesment_centre*Scaled_Na + PC1*Scaled_Na + PC2*Scaled_Na+ PC3*Scaled_Na + PC4*Scaled_Na + PC5*Scaled_Na + PC10*Scaled_Na+ PC11*Scaled_Na +
-                                    PC12*Scaled_Na + PC13*Scaled_Na + PC14*Scaled_Na + PC15*Scaled_Na + PC16*Scaled_Na + PC17*Scaled_Na + PC18*Scaled_Na + PC19*Scaled_Na + PC20*Scaled_Na,
-                                  data = Merged_PGS_PES)
-
-summary(DBP_Ratio_Transport_int_G_C_C_E)
-
+Renal_int_G_C_E_C <- lm(Mean_DBP ~ Sex*Renal_DBP_PES_AVG + Age*Renal_DBP_PES_AVG + Age2*Renal_DBP_PES_AVG + Assesment_centre_month*Renal_DBP_PES_AVG + 
+                          Assesment_centre*Renal_DBP_PES_AVG + PC1*Renal_DBP_PES_AVG + PC2*Renal_DBP_PES_AVG + PC3*Renal_DBP_PES_AVG + PC4*Renal_DBP_PES_AVG + PC5*Renal_DBP_PES_AVG + PC6*Renal_DBP_PES_AVG +
+                          PC7*Renal_DBP_PES_AVG + PC8*Renal_DBP_PES_AVG + PC9*Renal_DBP_PES_AVG +
+                          PC10*Renal_DBP_PES_AVG + PC11*Renal_DBP_PES_AVG +
+                          PC12*Renal_DBP_PES_AVG + PC13*Renal_DBP_PES_AVG + PC14*Renal_DBP_PES_AVG + PC15*Renal_DBP_PES_AVG + PC16*Renal_DBP_PES_AVG + PC17*Renal_DBP_PES_AVG + PC18*Renal_DBP_PES_AVG + PC19*Renal_DBP_PES_AVG + PC20*Renal_DBP_PES_AVG + 
+                          Sex*Scaled_K + Age*Scaled_K + Age2*Scaled_K + Assesment_centre_month*Scaled_K + 
+                          Assesment_centre*Scaled_K + PC1*Scaled_K + PC2*Scaled_K + PC3*Scaled_K + PC4*Scaled_K + PC5*Scaled_K + PC6*Scaled_K +
+                          PC7*Scaled_K + PC8*Scaled_K + PC9*Scaled_K +
+                          PC10*Scaled_K + PC11*Scaled_K +
+                          PC12*Scaled_K + PC13*Scaled_K + PC14*Scaled_K + PC15*Scaled_K + PC16*Scaled_K + PC17*Scaled_K + PC18*Scaled_K + PC19*Scaled_K + PC20*Scaled_K +Scaled_K*Renal_DBP_PES_AVG,
+                        data = Merged_PGS_PES)
 
 ## Calculate heteroskedasticity robust SE (HC3, https://doi.org/10.1080/00031305.2000.10474549)
 ## Heteroskedasticity of the residuals can lead to inflation
@@ -104,57 +100,27 @@ library(sandwich)
 
 ## White's Estimator
 
-coeftest(Ratio_Transport_int_G_C_C_E, vcov = vcovHC(Ratio_Transport_int_G_C_C_E, type="HC0"))
+coeftest(Transport_int_G_C_E_C, vcov = vcovHC(Transport_int_G_C_E_C, type="HC0"))
 
-## Transport_SBP_PES_AVG:Scaled_Na                 9.7531e-02  3.7263e-02   2.6174 0.0088609
 
-coeftest(Ratio_Transport_int_G_C_C_E, vcov = vcovHC(Ratio_Transport_int_G_C_C_E, type="HC3"))
+coeftest(Transport_int_G_C_E_C, vcov = vcovHC(Transport_int_G_C_E_C, type="HC3"))
 
-## Transport_SBP_PES_AVG:Scaled_Na                 9.7531e-02  3.7445e-02   2.6047 0.0091971
+## Na:K ratio
 
-x <- Merged_PGS_PES$Transport_SBP_PES_AVG
-y <- Merged_PGS_PES$SBP_PGS_Pt_0_01_AVG
+Merged_PGS_PES$Scaled_Na_2 <- as.numeric(scale(Merged_PGS_PES$Na_K_ratio))
 
-Merged_PGS_PES$PES <-
-  case_when(x > mean(x)+sd(x) ~ "1 SD > Mean",
-            x < mean(x)+sd(x) & x > mean(x)-sd(x) ~ "Comparator",
-            x < mean(x)-sd(x) ~ "1 SD < Mean")
+Ratio_Transport_int_G_C_E_C <- lm(Mean_SBP ~ Sex*Transport_SBP_PES_AVG + Age*Transport_SBP_PES_AVG + Age2*Transport_SBP_PES_AVG + Assesment_centre_month*Transport_SBP_PES_AVG + 
+                              Assesment_centre*Transport_SBP_PES_AVG + PC1*Transport_SBP_PES_AVG + PC2*Transport_SBP_PES_AVG + PC3*Transport_SBP_PES_AVG + PC4*Transport_SBP_PES_AVG + PC5*Transport_SBP_PES_AVG + PC6*Transport_SBP_PES_AVG +
+                              PC7*Transport_SBP_PES_AVG + PC8*Transport_SBP_PES_AVG + PC9*Transport_SBP_PES_AVG +
+                              PC10*Transport_SBP_PES_AVG + PC11*Transport_SBP_PES_AVG +
+                              PC12*Transport_SBP_PES_AVG + PC13*Transport_SBP_PES_AVG + PC14*Transport_SBP_PES_AVG + PC15*Transport_SBP_PES_AVG + PC16*Transport_SBP_PES_AVG + PC17*Transport_SBP_PES_AVG + PC18*Transport_SBP_PES_AVG + PC19*Transport_SBP_PES_AVG + PC20*Transport_SBP_PES_AVG + 
+                              Sex*Scaled_Na_2 + Age*Scaled_Na_2 + Age2*Scaled_Na + Assesment_centre_month*Scaled_Na_2 + 
+                              Assesment_centre*Scaled_Na_2 + PC1*Scaled_Na_2 + PC2*Scaled_Na_2 + PC3*Scaled_Na_2 + PC4*Scaled_Na_2 + PC5*Scaled_Na_2 + PC6*Scaled_Na_2 +
+                              PC7*Scaled_Na_2 + PC8*Scaled_Na_2 + PC9*Scaled_Na_2 +
+                              PC10*Scaled_Na_2 + PC11*Scaled_Na_2 +
+                              PC12*Scaled_Na_2 + PC13*Scaled_Na_2 + PC14*Scaled_Na_2 + PC15*Scaled_Na_2 + PC16*Scaled_Na_2 + PC17*Scaled_Na_2 + PC18*Scaled_Na_2 + PC19*Scaled_Na_2 + PC20*Scaled_Na_2 +Scaled_Na_2*Transport_SBP_PES_AVG,
+                            data = Merged_PGS_PES)
 
-Merged_PGS_PES %>% 
-  ggplot() +
-  aes(x = Scaled_Na, y = Mean_SBP, group = PES, color = PES) +
-  geom_smooth(method = "lm") +
-  theme_bw() +
-  xlab("Spot Na:K ratio (SD)") +
-  ylab("SBP (mmHg)") +
-  ggtitle("Main additive effects")
-
-## Other int plot
-
-Merged_PGS_PES$Na_binary <- ifelse(Merged_PGS_PES$Scaled_Na > 1, "Above", "Below")
-
-TE2 <- lm(Mean_SBP ~ Sex + Age + Age2 + Assesment_centre_month + 
-           Assesment_centre + PC1 + PC2 + PC3 + PC4 + PC5 + PC10 + PC11 +
-           PC12 + PC13 + PC14 + PC15 + PC16 + PC17 + PC18 + PC19 + PC20 + Na_binary*Transport_SBP_PES_AVG, data = Merged_PGS_PES)
-
-plot_model(TE2, type = "pred", terms = c("Na_binary", "Transport_SBP_PES_AVG"))
-
-TE3 <- lm(Mean_SBP ~ Sex + Age + Age2 + Assesment_centre_month + 
-            Assesment_centre + PC1 + PC2 + PC3 + PC4 + PC5 + PC10 + PC11 +
-            PC12 + PC13 + PC14 + PC15 + PC16 + PC17 + PC18 + PC19 + PC20 + Na_binary*SBP_PGS_Pt_0_01_AVG, data = Merged_PGS_PES)
-
-plot_model(TE3, type = "pred", terms = c("Na_binary", "SBP_PGS_Pt_0_01_AVG"))
-
-Merged_PGS_PES$Scaled_K <- as.numeric(scale(Merged_PGS_PES$K_urine_millimolL))
-
-Merged_PGS_PES %>% 
-  ggplot() +
-  aes(x = Scaled_K, y = Mean_SBP, group = PES, color = PES) +
-  geom_smooth(method = "lm") +
-  theme_bw() +
-  xlab("Spot Urinary K (SD)") +
-  ylab("SBP (mmHg)") +
-  ggtitle("Main additive effects")
 
 ## Calculate the effect of sodium per score decile
 
