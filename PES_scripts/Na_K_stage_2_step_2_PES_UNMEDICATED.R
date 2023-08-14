@@ -59,7 +59,8 @@ List_traits <- as.list(c("Mean_DBP", "Mean_DBP", "Mean_DBP", "Mean_SBP", "Mean_S
 
 PES_BP_assoc <- function(score, BP, df) {
   fmla <- as.formula(paste(BP, "~ Sex + Age + Age2 + Assesment_centre_month + 
-                                     Assesment_centre + PC1 + PC2 + PC3 + PC4 + PC5 + PC10 + PC11 +
+                                     Assesment_centre + PC1 + PC2 + PC3 + PC4 + PC5 + 
+                                     PC6 + PC7 + PC8 + PC9 + PC10 + PC11 +
                                      PC12 + PC13 + PC14 + PC15 + PC16 + PC17 + PC18 + PC19 + PC20 + ", score))
   PES_mod <- lm(fmla, data = df)
   return(summary(PES_mod))
@@ -73,7 +74,7 @@ Run_PES_BP <- mapply(PES_BP_assoc, score = List_PES, BP =  List_traits,
 
 ## Extract relevant data
 
-Run_BP_extract <- apply(Run_PES_BP, 2, function(x) return(as.data.frame(x$coefficients)[53, 1:4]))
+Run_BP_extract <- apply(Run_PES_BP, 2, function(x) return(as.data.frame(x$coefficients)[57, 1:4]))
 
 Run_BP_results <- data.frame()
 
@@ -102,7 +103,8 @@ List_PGS <- as.list(c("Scaled_DBP_PGS_full", "Scaled_DBP_PGS_full", "Scaled_DBP_
 
 PES_BP_assoc_PGS_adjust <- function(score, BP, PGS, df) {
   fmla <- as.formula(paste(BP, "~ Sex + Age + Age2 + Assesment_centre_month + 
-                                     Assesment_centre + PC1 + PC2 + PC3 + PC4 + PC5 + PC10 + PC11 +
+                                     Assesment_centre + PC1 + PC2 + PC3 + PC4 + PC5 + 
+                                     PC6 + PC7 + PC8 + PC9 + PC10 + PC11 +
                                      PC12 + PC13 + PC14 + PC15 + PC16 + PC17 + PC18 + PC19 + PC20 + ", PGS, "+ ", score))
   PES_mod <- lm(fmla, data = df)
   return(summary(PES_mod))
@@ -116,7 +118,7 @@ Run_PES_BP_PGS_adjust <- mapply(PES_BP_assoc_PGS_adjust, score = List_PES, BP = 
 
 ## Extract relevant data
 
-Run_BP_extract_PGS_adjust <- apply(Run_PES_BP_PGS_adjust, 2, function(x) return(as.data.frame(x$coefficients)[54, 1:4]))
+Run_BP_extract_PGS_adjust <- apply(Run_PES_BP_PGS_adjust, 2, function(x) return(as.data.frame(x$coefficients)[58, 1:4]))
 
 Run_BP_results_PGS_adjust <- data.frame()
 
@@ -128,224 +130,48 @@ Run_BP_results_PGS_adjust$PES <- unlist(List_PES)
 Run_BP_results_PGS_adjust$BP_trait <- unlist(List_traits)
 Run_BP_results_PGS_adjust$PGS <- "PGS adjusted"
 
-PES_BP_results_unmed_cohort <- rbind(Run_BP_results, Run_BP_results_PGS_adjust)
+PES_BP_results_unmed <- rbind(Run_BP_results, Run_BP_results_PGS_adjust)
 
-write.table(PES_BP_results_unmed_cohort, file = "UKBB_PES/PES_BP_assoc_and_int/PES_assoc_UNMEDICATED_cohort_with_and_without_PGS_adjustment.txt",
+write.table(PES_BP_results_unmed, file = "UKBB_PES/PES_BP_assoc_and_int/PES_assoc_FULL_cohort_with_and_without_PGS_adjustment.txt",
             sep = "\t", row.names = F, quote = F)
 
+PES_BP_results_unmed$L_UI <- PES_BP_results_unmed$Estimate - (1.96*PES_BP_results_unmed$`Std. Error`)
+PES_BP_results_unmed$U_UI <- PES_BP_results_unmed$Estimate + (1.96*PES_BP_results_unmed$`Std. Error`)
 
-Merged_PGS_PES$Scaled_Na <- as.numeric(scale(Merged_PGS_PES$Na_urine_millimolL))
-Merged_PGS_PES$Scaled_K <- as.numeric(scale(Merged_PGS_PES$K_urine_millimolL))
-Merged_PGS_PES$Binary_ratio <- ifelse(Merged_PGS_PES$Na_K_ratio > 1.33, "High", "Low")
+PES_BP_results_unmed$PES_name <- c("Absorption", "Renal", "Transport",
+                                         "Absorption", "Renal", "Transport",
+                                         "Absorption", "Renal", "Transport",
+                                         "Absorption", "Renal", "Transport")
 
-## Interaction analyses
+SBP_results <- PES_BP_results_unmed %>% filter(BP_trait == "Mean_SBP")
+DBP_results <- PES_BP_results_unmed %>% filter(BP_trait == "Mean_DBP")
 
-PES_Na_K_int <- function(score, Urine, BP, df) {
-  fmla <- as.formula(paste(BP, "~ Sex + Age + Age2 + Assesment_centre_month + 
-                                     Assesment_centre + PC1 + PC2 + PC3 + PC4 + PC5 + PC10 + PC11 +
-                                     PC12 + PC13 + PC14 + PC15 + PC16 + PC17 + PC18 + PC19 + PC20 + ", Urine, "*", score))
-  PES_mod <- lm(fmla, data = df)
-  return(summary(PES_mod))
-}
-
-
-Run_int <- mapply(PES_Na_K_int, score = List_PES, BP =  List_traits, Urine = "Scaled_Na",
-                  MoreArgs = list(Merged_PGS_PES),
-                  SIMPLIFY = T)
-
-Run_int_K <- mapply(PES_Na_K_int, score = List_PES, BP =  List_traits, Urine = "Scaled_K",
-                    MoreArgs = list(Merged_PGS_PES),
-                    SIMPLIFY = T)
-Extract_int_Na <- apply(Run_int, 2, function(x) return(as.data.frame(x$coefficients)[55, 1:4]))
-
-Extract_int_K <- apply(Run_int_K, 2, function(x) return(as.data.frame(x$coefficients)[55, 1:4]))
-
-## Test with GxC terms and CxE terms
-
-Renal_int <- lm(Mean_DBP ~ Sex*Renal_DBP_PES_AVG + Age*Renal_DBP_PES_AVG + Age2*Renal_DBP_PES_AVG + Assesment_centre_month*Renal_DBP_PES_AVG + 
-                                     Assesment_centre*Renal_DBP_PES_AVG + PC1*Renal_DBP_PES_AVG + PC2*Renal_DBP_PES_AVG + PC3*Renal_DBP_PES_AVG + PC4*Renal_DBP_PES_AVG + PC5*Renal_DBP_PES_AVG + PC6*Renal_DBP_PES_AVG +
-                  PC7*Renal_DBP_PES_AVG + PC8*Renal_DBP_PES_AVG + PC9*Renal_DBP_PES_AVG +
-                  PC10*Renal_DBP_PES_AVG + PC11*Renal_DBP_PES_AVG +
-                                     PC12*Renal_DBP_PES_AVG + PC13*Renal_DBP_PES_AVG + PC14*Renal_DBP_PES_AVG + PC15*Renal_DBP_PES_AVG + PC16*Renal_DBP_PES_AVG + PC17*Renal_DBP_PES_AVG + PC18*Renal_DBP_PES_AVG + PC19*Renal_DBP_PES_AVG + PC20*Renal_DBP_PES_AVG + Scaled_K*Renal_DBP_PES_AVG,
-                data = Merged_PGS_PES)
-
-Renal_int_G_C_E_C <- lm(Mean_DBP ~ Sex*Renal_DBP_PES_AVG + Age*Renal_DBP_PES_AVG + Age2*Renal_DBP_PES_AVG + Assesment_centre_month*Renal_DBP_PES_AVG + 
-                  Assesment_centre*Renal_DBP_PES_AVG + PC1*Renal_DBP_PES_AVG + PC2*Renal_DBP_PES_AVG + PC3*Renal_DBP_PES_AVG + PC4*Renal_DBP_PES_AVG + PC5*Renal_DBP_PES_AVG + PC6*Renal_DBP_PES_AVG +
-                  PC7*Renal_DBP_PES_AVG + PC8*Renal_DBP_PES_AVG + PC9*Renal_DBP_PES_AVG +
-                  PC10*Renal_DBP_PES_AVG + PC11*Renal_DBP_PES_AVG +
-                  PC12*Renal_DBP_PES_AVG + PC13*Renal_DBP_PES_AVG + PC14*Renal_DBP_PES_AVG + PC15*Renal_DBP_PES_AVG + PC16*Renal_DBP_PES_AVG + PC17*Renal_DBP_PES_AVG + PC18*Renal_DBP_PES_AVG + PC19*Renal_DBP_PES_AVG + PC20*Renal_DBP_PES_AVG + 
-                    Sex*Scaled_K + Age*Scaled_K + Age2*Scaled_K + Assesment_centre_month*Scaled_K + 
-                    Assesment_centre*Scaled_K + PC1*Scaled_K + PC2*Scaled_K + PC3*Scaled_K + PC4*Scaled_K + PC5*Scaled_K + PC6*Scaled_K +
-                    PC7*Scaled_K + PC8*Scaled_K + PC9*Scaled_K +
-                    PC10*Scaled_K + PC11*Scaled_K +
-                    PC12*Scaled_K + PC13*Scaled_K + PC14*Scaled_K + PC15*Scaled_K + PC16*Scaled_K + PC17*Scaled_K + PC18*Scaled_K + PC19*Scaled_K + PC20*Scaled_K +Scaled_K*Renal_DBP_PES_AVG,
-                data = Merged_PGS_PES)
-
-Transport_int <- lm(Mean_SBP ~ Sex*Transport_SBP_PES_AVG + Age*Transport_SBP_PES_AVG + Age2*Transport_SBP_PES_AVG + Assesment_centre_month*Transport_SBP_PES_AVG + 
-                  Assesment_centre*Transport_SBP_PES_AVG + PC1*Transport_SBP_PES_AVG + PC2*Transport_SBP_PES_AVG + PC3*Transport_SBP_PES_AVG + PC4*Transport_SBP_PES_AVG + PC5*Transport_SBP_PES_AVG + PC6*Transport_SBP_PES_AVG +
-                  PC7*Transport_SBP_PES_AVG + PC8*Transport_SBP_PES_AVG + PC9*Transport_SBP_PES_AVG +
-                  PC10*Transport_SBP_PES_AVG + PC11*Transport_SBP_PES_AVG +
-                  PC12*Transport_SBP_PES_AVG + PC13*Transport_SBP_PES_AVG + PC14*Transport_SBP_PES_AVG + PC15*Transport_SBP_PES_AVG + PC16*Transport_SBP_PES_AVG + PC17*Transport_SBP_PES_AVG + PC18*Transport_SBP_PES_AVG + PC19*Transport_SBP_PES_AVG + PC20*Transport_SBP_PES_AVG + Scaled_Na*Transport_SBP_PES_AVG,
-                data = Merged_PGS_PES)
-
-Transport_int_G_C_E_C <- lm(Mean_SBP ~ Sex*Transport_SBP_PES_AVG + Age*Transport_SBP_PES_AVG + Age2*Transport_SBP_PES_AVG + Assesment_centre_month*Transport_SBP_PES_AVG + 
-                          Assesment_centre*Transport_SBP_PES_AVG + PC1*Transport_SBP_PES_AVG + PC2*Transport_SBP_PES_AVG + PC3*Transport_SBP_PES_AVG + PC4*Transport_SBP_PES_AVG + PC5*Transport_SBP_PES_AVG + PC6*Transport_SBP_PES_AVG +
-                          PC7*Transport_SBP_PES_AVG + PC8*Transport_SBP_PES_AVG + PC9*Transport_SBP_PES_AVG +
-                          PC10*Transport_SBP_PES_AVG + PC11*Transport_SBP_PES_AVG +
-                          PC12*Transport_SBP_PES_AVG + PC13*Transport_SBP_PES_AVG + PC14*Transport_SBP_PES_AVG + PC15*Transport_SBP_PES_AVG + PC16*Transport_SBP_PES_AVG + PC17*Transport_SBP_PES_AVG + PC18*Transport_SBP_PES_AVG + PC19*Transport_SBP_PES_AVG + PC20*Transport_SBP_PES_AVG + 
-                          Sex*Scaled_Na + Age*Scaled_Na + Age2*Scaled_Na + Assesment_centre_month*Scaled_Na + 
-                          Assesment_centre*Scaled_Na + PC1*Scaled_Na + PC2*Scaled_Na + PC3*Scaled_Na + PC4*Scaled_Na + PC5*Scaled_Na + PC6*Scaled_Na +
-                          PC7*Scaled_Na + PC8*Scaled_Na + PC9*Scaled_Na +
-                          PC10*Scaled_Na + PC11*Scaled_Na +
-                          PC12*Scaled_Na + PC13*Scaled_Na + PC14*Scaled_Na + PC15*Scaled_Na + PC16*Scaled_Na + PC17*Scaled_Na + PC18*Scaled_Na + PC19*Scaled_Na + PC20*Scaled_Na +Scaled_Na*Transport_SBP_PES_AVG,
-                        data = Merged_PGS_PES)
-
-
-
-
-Transport_int_null <- lm(Mean_SBP ~ Sex + Age + Age2 + Assesment_centre_month + 
-                           Assesment_centre + PC1 + PC2 + PC3 + PC4 + PC5 + PC10 + PC11 +
-                           PC12 + PC13 + PC14 + PC15 + PC16 + PC17 + PC18 + PC19 + PC20 + Scaled_Na + Transport_SBP_PES_AVG,
-                         data = Merged_PGS_PES)
-
-## Transport interaction plot
-
-interact_plot(Transport_int, pred = "Scaled_Na", modx = "Transport_SBP_PES_AVG", modx.values = c(-1.283521369, 0, 1.279041346),
-          interval = T)
-
-## Try another plot
-
-x <- Merged_PGS_PES$Transport_SBP_PES_AVG
-y <- Merged_PGS_PES$Scaled_SBP_PGS_full
-
-Merged_PGS_PES$PES <-
-  case_when(x > mean(x)+sd(x) ~ "High",
-            x < mean(x)+sd(x) & x > mean(x)-sd(x) ~ "Average",
-            x < mean(x)-sd(x) ~ "Low")
-
-Merged_PGS_PES$PGS <-
-  case_when(y > mean(y)+sd(y) ~ "High",
-            y < mean(y)+sd(y) & y > mean(y)-sd(y) ~ "Average",
-            y < mean(y)-sd(y) ~ "Low")
-
-Plot_2 <- Merged_PGS_PES %>% 
-  ggplot() +
-  aes(x = Scaled_Na, y = Mean_SBP, group = PES, color = PES) +
-  geom_smooth(method = "lm") +
+SBP_full <- ggplot(SBP_results, aes(x=PES_name, y=Estimate, ymin=L_UI, ymax=U_UI,colour = PES_name)) +
+  geom_pointrange() +
+  facet_wrap(~PGS, strip.position="top",nrow=2, scales = "free_y") +
+  coord_flip() +
   theme_bw() +
-  xlab("Spot Urinary Na (SD)") +
-  ylab("SBP (mmHg)") +
-  ggtitle("Main additive effects")
-
-## Add in full multiple regression effects
-
-Merged_PGS_PES$Trans_fit <- predict(Transport_int_G_C_C_E)
-Merged_PGS_PES$Main_fit <- predict(Transport_int_null)
-
-Plot1 <- Merged_PGS_PES %>% 
-  ggplot() +
-  aes(x = Mean_SBP, y = Trans_fit, group = PES, color = PES) +
-  geom_smooth(method = "lm", se = TRUE, aes(y=Trans_fit)) +
-  theme_bw() +
-  xlab("SBP (mmHg)") +
-  ylab("Pr") +
-  ggtitle("Predicted SBP (G, E, C, GxE, GxC, ExC)")
-
-ggarrange(Plot_2, Plot1, ncol = 2,
-          legend = "bottom", common.legend = T)
-
-Merged_PGS_PES %>% 
-  ggplot() +
-  aes(x = Scaled_Na, y = Mean_SBP, group = PGS, color = PGS) +
-  geom_smooth(method = "lm") +
-  theme_bw() +
-  xlab("Spot Urinary Na (SD)") +
-  ylab("SBP (mmHg)") +
-  ggtitle("SBP ~ Urinary Na (stratified by PGS)")
-
-
-sqrt(mean(Transport_int_null$residuals^2))
-sqrt(mean(Transport_int$residuals^2))
-
-## Make plots for extreme quantiles
-
-quantile(Merged_PGS_PES$Transport_SBP_PES_AVG, probs = seq(.1, .9, by = .1))
-
-High_PES_dat <- Merged_PGS_PES %>% filter(Transport_SBP_PES_AVG > 1.276391e+00)
-High_PES_dat$Scaled_Na_new <- as.numeric(scale(High_PES_dat$Na_urine_millimolL))
-Low_PES_dat <- Merged_PGS_PES %>% filter(Transport_SBP_PES_AVG < -1.279876e+00)
-Low_PES_dat$Scaled_Na_new <- as.numeric(scale(Low_PES_dat$Na_urine_millimolL))
-
-SBP_Na_high_PES <- lm(Mean_SBP ~ Sex + Age + Age2 + Assesment_centre_month + 
-                       Assesment_centre + PC1 + PC2 + PC3 + PC4 + PC5 + PC10 + PC11 +
-                       PC12 + PC13 + PC14 + PC15 + PC16 + PC17 + PC18 + PC19 + PC20 +
-                       Scaled_Na_new, data = High_PES_dat)
-
-SBP_Na_low_PES <- lm(Mean_SBP ~ Sex + Age + Age2 + Assesment_centre_month + 
-                      Assesment_centre + PC1 + PC2 + PC3 + PC4 + PC5 + PC10 + PC11 +
-                      PC12 + PC13 + PC14 + PC15 + PC16 + PC17 + PC18 + PC19 + PC20 +
-                      Scaled_Na_new, data = Low_PES_dat)
-
-Low_PES_dat$fitted <- predict(SBP_Na_low_PES)
-High_PES_dat$fitted <- predict(SBP_Na_high_PES)
-
-Na_plot_high_PES <- ggplot(data = High_PES_dat, aes(x = Scaled_Na_new, y = Mean_SBP)) + 
-  geom_smooth(method = "lm", se = TRUE, aes(y=fitted))
-  ylab("Mean SBP (mmHg)") +
-  theme_bw() +
-  xlab("Spot Scaled Urinary Sodium (SD)") +
+  geom_hline(yintercept=0, lty=2) +
+  theme(legend.position = "bottom") +
+  ylab("Effect per SD increase in PES on SBP (mmHg)") +
   theme(legend.position = "none") +
-  ggtitle("> 90th percentile Transport PES") 
+  xlab("PES score") +
+  ylim(-0.05, 0.6) +
+  ggtitle("SBP")
 
-Na_plot_low_PES <- ggplot(data = Low_PES_dat, aes(x = Scaled_Na_new, y = Mean_SBP)) + 
-  geom_smooth(method = "lm", se = TRUE,colour = "red", aes(y=fitted)) +
-  ylab("Mean SBP (mmHg)") +
+DBP_full <- ggplot(DBP_results, aes(x=PES_name, y=Estimate, ymin=L_UI, ymax=U_UI,colour = PES_name)) +
+  geom_pointrange() +
+  facet_wrap(~PGS, strip.position="top",nrow=2, scales = "free_y") +
+  coord_flip() +
   theme_bw() +
-  xlab("Spot Scaled Urinary Sodium (SD)") +
-  theme(legend.position = "none") +
-  ggtitle("< 10th percentile Transport PES")
+  geom_hline(yintercept=0, lty=2) +
+  theme(legend.position = "bottom") +
+  ylab("Effect per SD increase in PES on DBP (mmHg)") +
+  theme(legend.position = "none", axis.text.y = element_blank(), axis.ticks.y =  element_blank()) +
+  xlab(" ") +
+  ylim(-0.05, 0.6) +
+  ggtitle("DBP")
 
-ggarrange(Na_plot_high_PES, Na_plot_low_PES, nrow = 2)
-
-quantile(Merged_PGS_PES$Scaled_SBP_PGS_full, probs = seq(.1, .9, by = .1))
-
-High_PGS_dat <- Merged_PGS_PES %>% filter(Scaled_SBP_PGS_full > 1.279041346)
-High_PGS_dat$Scaled_Na_new <- as.numeric(scale(High_PGS_dat$Na_urine_millimolL))
-Low_PGS_dat <- Merged_PGS_PES %>% filter(Scaled_SBP_PGS_full < -1.283521369)
-Low_PGS_dat$Scaled_Na_new <- as.numeric(scale(Low_PGS_dat$Na_urine_millimolL))
-
-SBP_Na_high_PGS <- lm(Mean_SBP ~ Sex + Age + Age2 + Assesment_centre_month + 
-                       Assesment_centre + PC1 + PC2 + PC3 + PC4 + PC5 + PC10 + PC11 +
-                       PC12 + PC13 + PC14 + PC15 + PC16 + PC17 + PC18 + PC19 + PC20 +
-                       Scaled_Na_new, data = High_PGS_dat)
-
-SBP_Na_low_PGS <- lm(Mean_SBP ~ Sex + Age + Age2 + Assesment_centre_month + 
-                      Assesment_centre + PC1 + PC2 + PC3 + PC4 + PC5 + PC10 + PC11 +
-                      PC12 + PC13 + PC14 + PC15 + PC16 + PC17 + PC18 + PC19 + PC20 +
-                      Scaled_Na_new, data = Low_PGS_dat)
-
-Low_PGS_dat$fitted <- predict(SBP_Na_low_PGS)
-High_PGS_dat$fitted <- predict(SBP_Na_high_PGS)
-
-
-Na_plot_high_PGS <- ggplot(data = High_PGS_dat, aes(x = Scaled_Na, y = Mean_SBP)) + 
-  geom_smooth(method = "lm", se = TRUE, aes(y=fitted)) +
-  ylab("Mean SBP (mmHg)") +
-  theme_bw() +
-  xlab("Spot Scaled Sodium Potassium (SD)") +
-  theme(legend.position = "none") +
-  ggtitle("> 90th percentile genome-wide PGS")
-
-Na_plot_low_PGS <- ggplot(data = Low_PGS_dat, aes(x = Scaled_Na, y = Mean_SBP)) + 
-  geom_smooth(method = "lm", se = TRUE,colour = "red", aes(y=fitted)) +
-  ylab("Mean SBP (mmHg)") +
-  theme_bw() +
-  xlab("Spot Scaled Urinary Sodium (SD)") +
-  theme(legend.position = "none") +
-  ggtitle("< 10th percentile genome-wide PGS")
-
-ggarrange(Na_plot_high_PGS, Na_plot_low_PGS, nrow = 2)
-
-## Plot effect on SBP per Na decile in low and high
+ggarrange(SBP_full, DBP_full)
 
 
