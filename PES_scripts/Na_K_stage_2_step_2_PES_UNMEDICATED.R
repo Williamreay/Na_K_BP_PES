@@ -174,4 +174,66 @@ DBP_full <- ggplot(DBP_results, aes(x=PES_name, y=Estimate, ymin=L_UI, ymax=U_UI
 
 ggarrange(SBP_full, DBP_full)
 
+Merged_PGS_PES$Scaled_Na <- as.numeric(scale(Merged_PGS_PES$Na_urine_millimolL))
+Merged_PGS_PES$Scaled_K <- as.numeric(scale(Merged_PGS_PES$K_urine_millimolL))
+Merged_PGS_PES$Binary_ratio <- ifelse(Merged_PGS_PES$Na_K_ratio > 1.33, "High", "Low")
+
+## Interaction analyses
+
+PES_Na_K_int <- function(score, Urine, BP, df) {
+  fmla <- as.formula(paste(BP, "~ Sex + Age + Age2 + Assesment_centre_month + 
+                                     Assesment_centre + PC1 + PC2 + PC3 + PC4 + PC5 + PC6 + PC7 + PC8 + PC9 + PC10 + PC11 +
+                                     PC12 + PC13 + PC14 + PC15 + PC16 + PC17 + PC18 + PC19 + PC20 + ", Urine, "*", score))
+  PES_mod <- lm(fmla, data = df)
+  return(summary(PES_mod))
+}
+
+
+Run_int <- mapply(PES_Na_K_int, score = List_PES, BP =  List_traits, Urine = "Scaled_Na",
+                  MoreArgs = list(Merged_PGS_PES),
+                  SIMPLIFY = T)
+
+Run_int_K <- mapply(PES_Na_K_int, score = List_PES, BP =  List_traits, Urine = "Scaled_K",
+                    MoreArgs = list(Merged_PGS_PES),
+                    SIMPLIFY = T)
+Extract_int_Na <- apply(Run_int, 2, function(x) return(as.data.frame(x$coefficients)[59, 1:4]))
+
+Extract_int_K <- apply(Run_int_K, 2, function(x) return(as.data.frame(x$coefficients)[59, 1:4]))
+
+## Test with GxC terms and CxE terms
+
+Renal_int <- lm(Mean_DBP ~ Sex*Renal_DBP_PES_AVG + Age*Renal_DBP_PES_AVG + Age2*Renal_DBP_PES_AVG + Assesment_centre_month*Renal_DBP_PES_AVG + 
+                  Assesment_centre*Renal_DBP_PES_AVG + PC1*Renal_DBP_PES_AVG + PC2*Renal_DBP_PES_AVG + PC3*Renal_DBP_PES_AVG + PC4*Renal_DBP_PES_AVG + PC5*Renal_DBP_PES_AVG + 
+                  PC6*Renal_DBP_PES_AVG + PC7*Renal_DBP_PES_AVG + PC8*Renal_DBP_PES_AVG + PC9*Renal_DBP_PES_AVG + PC10*Renal_DBP_PES_AVG + PC11*Renal_DBP_PES_AVG +
+                  PC12*Renal_DBP_PES_AVG + PC13*Renal_DBP_PES_AVG + PC14*Renal_DBP_PES_AVG + PC15*Renal_DBP_PES_AVG + PC16*Renal_DBP_PES_AVG + PC17*Renal_DBP_PES_AVG + PC18*Renal_DBP_PES_AVG + PC19*Renal_DBP_PES_AVG + PC20*Renal_DBP_PES_AVG + Scaled_K*Renal_DBP_PES_AVG,
+                data = Merged_PGS_PES)
+
+Renal_int_G_C_C_E <- lm(Mean_DBP ~ Sex*Renal_DBP_PES_AVG + Age*Renal_DBP_PES_AVG + Age2*Renal_DBP_PES_AVG + Assesment_centre_month*Renal_DBP_PES_AVG + 
+                          Assesment_centre*Renal_DBP_PES_AVG + PC1*Renal_DBP_PES_AVG + PC2*Renal_DBP_PES_AVG + PC3*Renal_DBP_PES_AVG + PC4*Renal_DBP_PES_AVG + PC5*Renal_DBP_PES_AVG + 
+                          PC6*Renal_DBP_PES_AVG + PC7*Renal_DBP_PES_AVG + PC8*Renal_DBP_PES_AVG + PC9*Renal_DBP_PES_AVG + PC10*Renal_DBP_PES_AVG + PC11*Renal_DBP_PES_AVG +
+                          PC12*Renal_DBP_PES_AVG + PC13*Renal_DBP_PES_AVG + PC14*Renal_DBP_PES_AVG + PC15*Renal_DBP_PES_AVG + PC16*Renal_DBP_PES_AVG + PC17*Renal_DBP_PES_AVG + PC18*Renal_DBP_PES_AVG + PC19*Renal_DBP_PES_AVG + PC20*Renal_DBP_PES_AVG + Scaled_K*Renal_DBP_PES_AVG +
+                          Sex*Scaled_K + Age*Scaled_K + Age2*Scaled_K + Assesment_centre_month*Scaled_K + 
+                          Assesment_centre*Scaled_K + PC1*Scaled_K + PC2*Scaled_K + PC3*Scaled_K + PC4*Scaled_K + PC5*Scaled_K + PC6*Scaled_K + PC7*Scaled_K + PC8*Scaled_K + PC9*Scaled_K +
+                          PC10*Scaled_K + PC11*Scaled_K +
+                          PC12*Scaled_K + PC13*Scaled_K + PC14*Scaled_K + PC15*Scaled_K + PC16*Scaled_K + PC17*Scaled_K + PC18*Scaled_K + PC19*Scaled_K + PC20*Scaled_K,
+                        
+                        data = Merged_PGS_PES)
+
+Transport_int <- lm(Mean_SBP ~ Sex*Transport_SBP_PES_AVG + Age*Transport_SBP_PES_AVG + Age2*Transport_SBP_PES_AVG + Assesment_centre_month*Transport_SBP_PES_AVG + 
+                      Assesment_centre*Transport_SBP_PES_AVG + PC1*Transport_SBP_PES_AVG + PC2*Transport_SBP_PES_AVG+ PC3*Transport_SBP_PES_AVG + PC4*Transport_SBP_PES_AVG + PC5*Transport_SBP_PES_AVG + 
+                      PC6*Transport_SBP_PES_AVG + PC7*Transport_SBP_PES_AVG + PC8*Transport_SBP_PES_AVG + PC9*Transport_SBP_PES_AVG + PC10*Transport_SBP_PES_AVG+ PC11*Transport_SBP_PES_AVG +
+                      PC12*Transport_SBP_PES_AVG + PC13*Transport_SBP_PES_AVG + PC14*Transport_SBP_PES_AVG + PC15*Transport_SBP_PES_AVG + PC16*Transport_SBP_PES_AVG + PC17*Transport_SBP_PES_AVG + PC18*Transport_SBP_PES_AVG + PC19*Transport_SBP_PES_AVG + PC20*Transport_SBP_PES_AVG + Scaled_Na*Transport_SBP_PES_AVG
+                      ,data = Merged_PGS_PES)
+
+Transport_int_G_C_C_E <- lm(Mean_SBP ~ Sex*Transport_SBP_PES_AVG + Age*Transport_SBP_PES_AVG + Age2*Transport_SBP_PES_AVG + Assesment_centre_month*Transport_SBP_PES_AVG + 
+                              Assesment_centre*Transport_SBP_PES_AVG + PC1*Transport_SBP_PES_AVG + PC2*Transport_SBP_PES_AVG+ 
+                              PC3*Transport_SBP_PES_AVG + PC4*Transport_SBP_PES_AVG + PC5*Transport_SBP_PES_AVG + PC6*Transport_SBP_PES_AVG + PC7*Transport_SBP_PES_AVG + PC8*Transport_SBP_PES_AVG + PC9*Transport_SBP_PES_AVG +
+                              PC10*Transport_SBP_PES_AVG+ PC11*Transport_SBP_PES_AVG +
+                              PC12*Transport_SBP_PES_AVG + PC13*Transport_SBP_PES_AVG + PC14*Transport_SBP_PES_AVG + PC15*Transport_SBP_PES_AVG + 
+                              PC16*Transport_SBP_PES_AVG + PC17*Transport_SBP_PES_AVG + PC18*Transport_SBP_PES_AVG + PC19*Transport_SBP_PES_AVG + PC20*Transport_SBP_PES_AVG + 
+                              Scaled_Na*Transport_SBP_PES_AVG +
+                              Sex*Scaled_Na + Age*Scaled_Na + Age2*Scaled_Na + Assesment_centre_month*Scaled_Na + 
+                              Assesment_centre*Scaled_Na + PC1*Scaled_Na + PC2*Scaled_Na+ PC3*Scaled_Na + PC4*Scaled_Na + PC5*Scaled_Na + PC10*Scaled_Na+ PC11*Scaled_Na +
+                              PC12*Scaled_Na + PC13*Scaled_Na + PC14*Scaled_Na + PC15*Scaled_Na + PC16*Scaled_Na + PC17*Scaled_Na + PC18*Scaled_Na + PC19*Scaled_Na + PC20*Scaled_Na,
+                            data = Merged_PGS_PES)
 

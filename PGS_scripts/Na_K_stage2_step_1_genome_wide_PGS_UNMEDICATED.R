@@ -99,6 +99,16 @@ SBP_PGS_baseline_Na_int_simple_int <- lm(Mean_SBP ~ Sex + Age + Age2 + Assesment
                                            PC12 + PC13 + PC14 + PC15 + PC16 + PC17 + PC18 + PC19 + PC20 +
                                            Assesment_centre + Scaled_SBP_PGS_full*Scaled_Na_full, data = Merged_PGS)
 
+## Add GxC
+SBP_PGS_baseline_Na_int_all_cov_int <- lm(Mean_SBP ~ Sex*Scaled_SBP_PGS_full + Age*Scaled_SBP_PGS_full + Age2*Scaled_SBP_PGS_full + Assesment_centre_month*Scaled_SBP_PGS_full + 
+                                           PC1*Scaled_SBP_PGS_full + PC2*Scaled_SBP_PGS_full + PC3*Scaled_SBP_PGS_full + 
+                                           PC4*Scaled_SBP_PGS_full + PC5*Scaled_SBP_PGS_full + PC6*Scaled_SBP_PGS_full + PC7*Scaled_SBP_PGS_full +
+                                           PC8*Scaled_SBP_PGS_full + PC9*Scaled_SBP_PGS_full +
+                                           PC10*Scaled_SBP_PGS_full + PC11*Scaled_SBP_PGS_full +
+                                           PC12*Scaled_SBP_PGS_full + PC13*Scaled_SBP_PGS_full + PC14*Scaled_SBP_PGS_full + PC15*Scaled_SBP_PGS_full + PC16*Scaled_SBP_PGS_full + PC17*Scaled_SBP_PGS_full + PC18*Scaled_SBP_PGS_full + PC19*Scaled_SBP_PGS_full + PC20*Scaled_SBP_PGS_full +
+                                           Assesment_centre*Scaled_SBP_PGS_full + Scaled_SBP_PGS_full*Scaled_Na_full, data = Merged_PGS)
+
+
 
 ## Add GxC and ExC
 
@@ -141,6 +151,17 @@ SBP_PGS_baseline_K_int_simple_int <- lm(Mean_SBP ~ Sex + Age + Age2 + Assesment_
                                           PC1 + PC2 + PC3 + PC4 + PC5 + PC6 + PC7 + PC8 + PC9 + PC10 + PC11 +
                                           PC12 + PC13 + PC14 + PC15 + PC16 + PC17 + PC18 + PC19 + PC20 +
                                           Assesment_centre + Scaled_SBP_PGS_full*Scaled_K_full, data = Merged_PGS)
+
+
+## GxC added
+
+SBP_PGS_baseline_K_int_all_cov_int <- lm(Mean_SBP ~ Sex*Scaled_SBP_PGS_full + Age*Scaled_SBP_PGS_full + Age2*Scaled_SBP_PGS_full + Assesment_centre_month*Scaled_SBP_PGS_full + 
+                                           PC1*Scaled_SBP_PGS_full + PC2*Scaled_SBP_PGS_full + PC3*Scaled_SBP_PGS_full + 
+                                           PC4*Scaled_SBP_PGS_full + PC5*Scaled_SBP_PGS_full + PC6*Scaled_SBP_PGS_full + PC7*Scaled_SBP_PGS_full +
+                                           PC8*Scaled_SBP_PGS_full + PC9*Scaled_SBP_PGS_full +
+                                           PC10*Scaled_SBP_PGS_full + PC11*Scaled_SBP_PGS_full +
+                                           PC12*Scaled_SBP_PGS_full + PC13*Scaled_SBP_PGS_full + PC14*Scaled_SBP_PGS_full + PC15*Scaled_SBP_PGS_full + PC16*Scaled_SBP_PGS_full + PC17*Scaled_SBP_PGS_full + PC18*Scaled_SBP_PGS_full + PC19*Scaled_SBP_PGS_full + PC20*Scaled_SBP_PGS_full +
+                                           Assesment_centre*Scaled_SBP_PGS_full + Scaled_SBP_PGS_full*Scaled_K_full, data = Merged_PGS)
 
 
 ## Add GxC and ExC
