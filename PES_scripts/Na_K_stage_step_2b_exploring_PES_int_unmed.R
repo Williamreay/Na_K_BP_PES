@@ -128,13 +128,15 @@ Merged_PGS_PES$Decile_PES <- ntile(Merged_PGS_PES$Transport_SBP_PES_AVG, 10)
 Merged_PGS_PES$Decile_PGS <- ntile(Merged_PGS_PES$SBP_PGS_Pt_0_01_AVG, 10)
 
 
-Na_assoc_per_decile <- function(score, decile, df) {
+Na_assoc_per_decile <- function(decile, urinary, score, df) {
   new_df <- df[df[[score]] == decile,]
+  new_df$scaled_urinary <- as.numeric(scale(new_df[[urinary]]))
   mod <- lm(Mean_SBP ~ Sex + Age + Age2 + Assesment_centre_month + 
-                                     Assesment_centre + PC1 + PC2 + PC3 + PC4 + PC5 + PC10 + PC11 +
-                                     PC12 + PC13 + PC14 + PC15 + PC16 + PC17 + PC18 + PC19 + PC20 + scale(Na_urine_millimolL), data = new_df)
+              Assesment_centre + PC1 + PC2 + PC3 + PC4 + PC5 + PC6 + PC7 + PC8 + PC9 + PC10 + PC11 +
+              PC12 + PC13 + PC14 + PC15 + PC16 + PC17 + PC18 + PC19 + PC20 + scaled_urinary, data = new_df)
   return(summary(mod))
 }
+
 
 Vec_decile <- c(1,2,3,4,5, 6, 7, 8, 9, 10)
 
