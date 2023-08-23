@@ -52,14 +52,6 @@ Merged_PGS_PES$Transport_SBP_PES_AVG <- as.numeric(scale(Merged_PGS_PES$Transpor
 Merged_PGS_PES$Scaled_Na <- as.numeric(scale(Merged_PGS_PES$Na_urine_millimolL))
 Merged_PGS_PES$Scaled_CRET <- as.numeric(scale(Merged_PGS_PES$Creatinine_urine_micromolL))
 
-CREAT <- lm(Mean_SBP ~ Sex + Age + Age2 + Assesment_centre_month + 
-                 Assesment_centre + PC1 + PC2 + PC3 + PC4 + PC5 + PC10 + PC11 +
-                 PC12 + PC13 + PC14 + PC15 + PC16 + PC17 + PC18 + PC19 + PC20 + Scaled_CRET, data = Merged_PGS_PES)
-
-TE_CREAT <- lm(Mean_SBP ~ Sex + Age + Age2 + Assesment_centre_month + 
-           Assesment_centre + PC1 + PC2 + PC3 + PC4 + PC5 + PC10 + PC11 +
-           PC12 + PC13 + PC14 + PC15 + PC16 + PC17 + PC18 + PC19 + PC20 + Scaled_CRET + Transport_SBP_PES_AVG*Scaled_Na, data = Merged_PGS_PES)
-
 Transport_int_G_C_E_C <- lm(Mean_SBP ~ Sex*Transport_SBP_PES_AVG + Age*Transport_SBP_PES_AVG + Age2*Transport_SBP_PES_AVG + Assesment_centre_month*Transport_SBP_PES_AVG + 
                               Assesment_centre*Transport_SBP_PES_AVG + PC1*Transport_SBP_PES_AVG + PC2*Transport_SBP_PES_AVG + PC3*Transport_SBP_PES_AVG + PC4*Transport_SBP_PES_AVG + PC5*Transport_SBP_PES_AVG + PC6*Transport_SBP_PES_AVG +
                               PC7*Transport_SBP_PES_AVG + PC8*Transport_SBP_PES_AVG + PC9*Transport_SBP_PES_AVG +
