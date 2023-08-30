@@ -243,7 +243,11 @@ p1 <- Unmed_cohort %>%
     formula = y ~ x,
     color = "steelblue"
   )+
-  labs(title = "Raw Creatinine")
+  labs(title = "GLM") +
+  geom_vline(xintercept = 8635.34, lty="dashed", colour = "red") +
+  theme_bw() +
+  xlab("Urinary creatinine (micromol/L)") +
+  ylab("Urinary sodium (millimol/L)")
 
 p2 <- Unmed_cohort %>% 
   ggplot(aes(Creatinine_urine_micromolL,Na_urine_millimolL))+
@@ -253,7 +257,11 @@ p2 <- Unmed_cohort %>%
     formula = y ~ x + I(x^2),
     color = "steelblue"
   )+
-  labs(title = "Exponent Only Model")
+  labs(title = "Quadratic effects") +
+  geom_vline(xintercept = 8635.34, lty="dashed", colour = "red") +
+  theme_bw() +
+  xlab("Urinary creatinine (micromol/L)") +
+  ylab("Urinary sodium (millimol/L)")
 
 p3 <- Unmed_cohort %>% 
   ggplot(aes(Creatinine_urine_micromolL,Na_urine_millimolL))+
@@ -263,7 +271,11 @@ p3 <- Unmed_cohort %>%
     formula = y ~ s(x),
     color = "steelblue"
   )+
-  labs(title = "Spline Model")
+  labs(title = "Spline Model") +
+  geom_vline(xintercept = 8635.34, lty="dashed", colour = "red") +
+  theme_bw() +
+  xlab("Urinary creatinine (micromol/L)") +
+  ylab("Urinary sodium (millimol/L)")
 
 ggarrange(p1,p2,p3, nrow = 1)
 
@@ -283,35 +295,48 @@ fit.6 <- gam(Na_urine_millimolL ~ Sex + Age + Age2 + Assesment_centre_month +
 
 p4 <- Winsorized %>% 
   ggplot(aes(Creatinine_urine_micromolL,Na_urine_millimolL))+
-  geom_point(alpha = 0.6, size = 0.5)+
+  geom_point(alpha = 0.6)+
   geom_smooth(
     method = "lm",
     formula = y ~ x,
     color = "steelblue"
   )+
-  labs(title = "Raw Creatinine") +
-  geom_vline(xintercept = 8635.34, lty="dashed", colour = "red")
+  labs(title = "GLM") +
+  geom_vline(xintercept = 8635.34, lty="dashed", colour = "red") +
+  geom_vline(xintercept = 14306.84, lty="dashed", colour = "purple") +
+  theme_bw() +
+  xlab("Urinary creatinine (micromol/L)") +
+  ylab("Urinary sodium (millimol/L)")
 
 p5 <- Winsorized %>% 
   ggplot(aes(Creatinine_urine_micromolL,Na_urine_millimolL))+
-  geom_point(alpha = 0.6, size = 0.5)+
+  geom_point(alpha = 0.6)+
   geom_smooth(
     method = "lm",
     formula = y ~ x + I(x^2),
     color = "steelblue"
   )+
-  labs(title = "Exponent Only Model") +
-  geom_vline(xintercept = 8635.34, lty="dashed", colour = "red")
+  labs(title = "Quadratic effects") +
+  geom_vline(xintercept = 8635.34, lty="dashed", colour = "red") +
+  geom_vline(xintercept = 14306.84, lty="dashed", colour = "purple") +
+  theme_bw() +
+  xlab("Urinary creatinine (micromol/L)") +
+  ylab("Urinary sodium (millimol/L)")
 
 p6 <- Winsorized %>% 
   ggplot(aes(Creatinine_urine_micromolL,Na_urine_millimolL))+
-  geom_point(alpha = 0.6, size = 0.5)+
+  geom_point(alpha = 0.6)+
   geom_smooth(
     method = "gam",
     formula = y ~ s(x),
     color = "steelblue"
   )+
   labs(title = "Spline Model") +
-  geom_vline(xintercept = 8635.34, lty="dashed", colour = "red")
+  geom_vline(xintercept = 8635.34, lty="dashed", colour = "red") +
+  geom_vline(xintercept = 14306.84, lty="dashed", colour = "purple") +
+  theme_bw() +
+  xlab("Urinary creatinine (micromol/L)") +
+  ylab("Urinary sodium (millimol/L)")
+
 
 ggarrange(p4, p5, p6, nrow = 1)
